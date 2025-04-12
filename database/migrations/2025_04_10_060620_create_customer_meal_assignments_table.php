@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('customer_meal_assignments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers');
-            $table->foreignId('meal_plan_id')->constrained('meal_plans');
             $table->foreignId('menu_item_id')->constrained('menu_items');
             $table->enum("delivery_status",["delivered", "preparing", "delivering", "cancelled"]);
             $table->timestamps();

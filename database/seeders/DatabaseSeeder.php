@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Customers;
 use App\Models\MealPlan;
 use App\Models\Address;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -22,11 +23,9 @@ class DatabaseSeeder extends Seeder
             Customers::factory()->create([
                 'meal_plan_id' => $mealPlans[$i]->id,
                 'address_id' => $addresses[$i]->id,
-                ]);
-            }
+            ]);
+        }
 
-        $menuItems = MenuItems::factory(200)->create();
-
-
+        $menuItems = MenuItems::factory(300)->create();
     }
 }

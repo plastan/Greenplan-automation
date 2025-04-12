@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 use App\Models\MenuItems;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
@@ -18,9 +19,9 @@ class MenuItemsFactory extends Factory
     protected $model = MenuItems::class;
     public function definition(): array
     {
-        $randomDate= $this->faker->dateTimeBetween('-2 months', 'now');
+        $randomDate = $this->faker->dateTimeBetween('-1 months', '1 week');
         $carbonDate = Carbon::instance($randomDate);
-        $weekStartDate= $carbonDate->previous(Carbon::MONDAY);
+        $weekStartDate = $carbonDate->previous(Carbon::MONDAY);
         if ($carbonDate->dayOfWeek === Carbon::MONDAY) {
             $weekStartDate = $carbonDate;
         }
@@ -47,7 +48,7 @@ class MenuItemsFactory extends Factory
             'Assorted fresh sushi rolls with wasabi and soy sauce.',
         ];
         $index = $this->faker->numberBetween(0, count($dishNames) - 1);
-        $daysToAdd = rand(0, 6); // 0 = Monday, 6 = Sunday
+        $daysToAdd = rand(-1, 6); // 0 = Monday, 6 = Sunday
         $randomDayInWeek = $weekStartDate->copy()->addDays($daysToAdd);
 
         return [

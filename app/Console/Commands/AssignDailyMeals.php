@@ -6,7 +6,11 @@ use Illuminate\Console\Command;
 use App\Models\Customers;
 use App\Models\MenuItems;
 use Carbon\Carbon;
+
 use App\Models\CustomerMealAssignments;
+
+
+
 class AssignDailyMeals extends Command
 {
     /**
@@ -30,9 +34,21 @@ class AssignDailyMeals extends Command
     {
         $today = Carbon::now();
         $dayOfWeek = strtolower($today->format('l'));
+
         $customers = Customers::query()->where('subscription_status', '=', 'active')->get();
 
         $this->info("Starting daily meal assignment for {$today->format('Y-m-d')} ({$dayOfWeek})");
+
+
+
+
+
+        // TODO:
+        // GET Customers
+        // CHECK SUBSCRIPTION STATUS
+        // GET MEAL PLAN
+        // CHECK MEAL PLAN TYPE
+        // CHECK Skipping
 
         foreach ($customers as $customer) {
             $mealPlan = $customer->mealPlan;
@@ -42,33 +58,22 @@ class AssignDailyMeals extends Command
                 continue;
             }
 
-            $isVegDay = ($mealPlan->veg_day === $dayOfWeek);
+            // $isVegDay = ($mealPlan->veg_day === $dayOfWeek);
+            //
 
             $menuItems = MenuItems::query()->where('dietary_type', $mealPlan->type)
                 ->whereDate('created_at', Carbon::today())
                 ->get();
+            $this->info("Found {$menuItems->count()} menu items for customer ID {$customer->id}");
 
             $selectedItem = $menuItems->random();
 
             CustomerMealAssignments::create([
                 'customer_id' => $customer->id,
                 'menu_item_id' => $selectedItem->id,
-                'meal_type' =>  $mealPlan->type,
-                'delivery_date' => $today->format('Y-m-d'),
-                'status' => 'scheduled',
-                'special_instructions' => $mealPlan->special_instruction,
+                'delivery_status' => 'delivered',
             ]);
-
-
         }
         return Command::SUCCESS;
     }
 }
-
-
-
-
-
-
-
-
