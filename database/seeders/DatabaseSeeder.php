@@ -8,6 +8,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Customers;
 use App\Models\MealPlan;
 use App\Models\Address;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,15 +20,49 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        $mealPlans = MealPlan::factory(10)->create();
-        $addresses = Address::factory(10)->create();
+
+
+
+
+
+        $customers = Customers::factory(10)->create();
+
         for ($i = 0; $i < 10; $i++) {
-            Customers::factory()->create([
-                'meal_plan_id' => $mealPlans[$i]->id,
-                'address_id' => $addresses[$i]->id,
+            $mealPlans = MealPlan::factory(1)->create([
+                'customer_id' => $customers[$i],
+            ]);
+            $addresses = Address::factory(1)->create([
+                'customer_id' => $customers[$i]
             ]);
         }
+        MenuItems::factory()->forPastMonth();
 
-        $menuItems = MenuItems::factory(300)->create();
+
+
+
+
+        $user1 = User::create([
+            'name' => 'superAdmin',
+            'email' => 'admin@super.com',
+            'password' => Hash::make('12345'),
+        ]);
+        $user2  = User::create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('12345'),
+        ]);
+        $chef_user = User::create([
+            'name' => 'chef1',
+            'email' => 'chef1@chef.com',
+            'password' => Hash::make('12345'),
+        ]);
+
+
+        $role1 = Role::create(['name' => 'superAdmin']);
+        $user1->assignrole($role1);
+        $role2 = Role::create(['name' => 'admin']);
+        $user2->assignrole($role2);
+        $role_chef = Role::create(['name' => 'chef']);
+        $chef_user->assignrole($role_chef);
     }
 }

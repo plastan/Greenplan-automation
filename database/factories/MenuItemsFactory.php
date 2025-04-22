@@ -53,16 +53,37 @@ class MenuItemsFactory extends Factory
 
         return [
             "week_start_date" => $weekStartDate,
+            // "meal_date" => $randomDayInWeek,
             "name" => $dishNames[$index],
             "description" => $descriptions[$index],
-            "category" => $this->faker->randomElement(['breakfast', 'lunch', 'dinner']),
-            "dietary_type" => $this->faker->randomElement(['diabetic', 'muscle gain', 'weight loss']),
+            // "dietary_type" => $this->faker->randomElement(['diabetic', 'muscle gain', 'weight loss']),
             "calories" => $this->faker->numberBetween(100, 500),
             "fat" => $this->faker->numberBetween(10, 50),
             "carbs" => $this->faker->numberBetween(10, 50),
             "protein" => $this->faker->numberBetween(10, 50),
-            "created_at" => $randomDayInWeek,
-            "updated_at" => $randomDayInWeek,
         ];
+    }
+
+    public function forPastMonth(): void
+    {
+
+        $categories = ['breakfast', 'lunch', 'dinner'];
+        $dietaryTypes = ['diabetic', 'muscle gain', 'weight loss'];
+        $today = Carbon::today()->copy()->addDay(5);
+        $startDate = Carbon::today()->subMonth();
+
+        // Loop through each day in the past month
+        for ($date = $startDate; $date->lte($today); $date = $date->copy()->addDay()) {
+            // Create one menu item for each category on this date
+            foreach ($categories as $category) {
+                foreach ($dietaryTypes as $dietaryType) {
+                    $this->model::factory()->create([
+                        'category' => $category,
+                        'dietary_type' => $dietaryType,
+                        'meal_date' => $date,
+                    ]);
+                }
+            }
+        }
     }
 }

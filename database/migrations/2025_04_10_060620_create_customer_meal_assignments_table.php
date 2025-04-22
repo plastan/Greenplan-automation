@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('customers');
             $table->foreignId('menu_item_id')->constrained('menu_items');
-            $table->enum("delivery_status",["delivered", "preparing", "delivering", "cancelled"]);
+            $table->enum("delivery_status", ["delivered", "preparing", "delivering", "cancelled"]);
+            $table->timestamp('meal_date');
             $table->timestamps();
         });
+        // constrain uniqueness of meal_date,customer_id,menu_item_id
+        Schema::table('customer_meal_assignments', function (Blueprint $table) {
+            $table->unique(['meal_date', 'customer_id', 'menu_item_id']);
+        });
     }
-
     /**
      * Reverse the migrations.
      */

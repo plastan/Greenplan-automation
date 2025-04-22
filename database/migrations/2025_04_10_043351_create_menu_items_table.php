@@ -14,17 +14,16 @@ return new class extends Migration
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->date("week_start_date");
+            $table->date("meal_date");
             $table->string("name");
             $table->string("description");
-            $table->enum("category",["breakfast", "lunch", "dinner"]);
-            $table->enum("dietary_type",["diabetic", "muscle gain", "weight loss"]);
+            $table->enum("category", ["breakfast", "lunch", "dinner"]);
+            $table->enum("dietary_type", ["diabetic", "muscle gain", "weight loss"]);
             $table->float('calories')->nullable();
             $table->float('fat')->nullable();
             $table->float('carbs')->nullable();
             $table->float('protein')->nullable();
             $table->timestamps();
-
-
         });
     }
 

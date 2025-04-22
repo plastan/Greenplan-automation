@@ -16,6 +16,7 @@ class Address extends Model
      * @var array
      */
     protected $fillable = [
+        'customer_id',
         'region',
         'emirate',
         'area',
@@ -28,9 +29,8 @@ class Address extends Model
     /**
      * Get the customers for the address.
      */
-    public function customers():HasOne
+    public function customers()
     {
-        return $this->hasOne(Customer::class);
-
+        return $this->belongsTo(Customers::class);
     }
 }

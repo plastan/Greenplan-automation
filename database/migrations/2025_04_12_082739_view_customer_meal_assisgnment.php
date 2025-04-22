@@ -41,9 +41,11 @@ return new class extends Migration
                 mp.special_instruction
             FROM
                 customer_meal_assignments cma
-                JOIN customers c ON cma.customer_id = c.id
-                JOIN menu_items mi ON cma.menu_item_id = mi.id
-                JOIN meal_plans mp ON c.meal_plan_id = mp.id
+                JOIN customers c ON cma.customer_id= c.id
+                JOIN menu_items mi ON cma.menu_item_id= mi.id
+                JOIN meal_plans mp ON mp.customer_id= cma.id
+
+            where c.subscription_status = 'active'
         ");
         //
     }

@@ -5,6 +5,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Address;
+use App\Models\Customers;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
  */
@@ -18,7 +20,8 @@ class AddressFactory extends Factory
     protected  $model = Address::class;
     public function definition(): array
     {
-       return [
+        return [
+            // 'customer_id' => Customers::factory(),
             'region' => $this->faker->randomElement(['North', 'South', 'East', 'West', 'Central']),
             'emirate' => $this->faker->randomElement(['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Fujairah', 'Ras Al Khaimah', 'Umm Al Quwain']),
             'area' => $this->faker->city() . ' ' . $this->faker->citySuffix(),

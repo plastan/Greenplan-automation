@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Customers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\MealPlan;
 
@@ -19,11 +20,14 @@ class MealPlanFactory extends Factory
     public function definition(): array
     {
         return [
+            // 'customer_id' => Customers::factory(),
             'type' => $this->faker->randomElement(['muscle gain', 'weight loss', 'diabetic']),
             'breakfast' => $this->faker->boolean(),
             'lunch' => $this->faker->boolean(80), // 80% chance of being true
             'dinner' => $this->faker->boolean(80), // 80% chance of being true
             'restrictions_note' => $this->faker->optional(0.7)->text(100), // 70% chance of having a note
+            'cycle_number' => $this->faker->numberBetween(1, 10),
+            'current_day' => $this->faker->numberBetween(1, 26),
             'special_instruction' => $this->faker->optional(0.5)->sentence(),
             'veg_day' => $this->faker->randomElement(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', null]),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

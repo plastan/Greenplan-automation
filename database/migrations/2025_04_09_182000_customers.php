@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('wa_number'); // WhatsApp number
-            $table->foreignId('meal_plan_id')->constrained('meal_plans');
-            $table->foreignId('address_id')->constrained('addresses');
             $table->string('subscription_status');
             $table->integer('age')->nullable();
             $table->string('email')->unique();

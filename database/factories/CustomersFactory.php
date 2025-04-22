@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Customers;
 use App\Models\MealPlan;
 use App\Models\Address;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
@@ -16,7 +17,7 @@ class CustomersFactory extends Factory
      *
      * @return array<string, mixed>
      */
- protected $model = Customers::class;
+    protected $model = Customers::class;
 
     public function definition(): array
     {
@@ -25,14 +26,12 @@ class CustomersFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'wa_number' => $this->faker->phoneNumber(),
-            'meal_plan_id' => MealPlan::factory(),
-            'address_id' => Address::factory(),
             'subscription_status' => $this->faker->randomElement(['active', 'inactive']),
             'age' => $this->faker->numberBetween(18, 100),
             'email' => $this->faker->unique()->safeEmail(),
             'weight' => $this->faker->numberBetween(50, 200),
             'height' => $this->faker->numberBetween(150, 250),
-            'cycle' => $this->faker->randomElement(['weekly', 'bi-weekly', 'monthly']),
+            'cycle' => $this->faker->numberBetween(1, 10),
             'cycle_start_date' => $cycleStartDate,
             'first_cycle_date' => $firstCycleDate,
             //

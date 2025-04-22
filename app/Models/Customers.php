@@ -18,8 +18,6 @@ class Customers extends Model
     protected $fillable = [
         'name',
         'wa_number',
-        'meal_plan_id',
-        'address_id',
         'subscription_status',
         'age',
         'email',
@@ -45,17 +43,17 @@ class Customers extends Model
 
     /**
      * Get the meal plan that owns the customer.
-     */
-    public function mealPlan(): BelongsTo
+     **/
+    public function mealPlan()
     {
-        return $this->belongsTo(MealPlan::class);
+        return $this->hasOne(MealPlan::class, 'customer_id', 'id');
     }
 
     /**
      * Get the address that owns the customer.
      */
-    public function address(): BelongsTo
+    public function address()
     {
-        return $this->belongsTo(Address::class);
+        return $this->hasOne(Address::class, 'customer_id', 'id');
     }
 }
