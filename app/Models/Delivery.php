@@ -11,9 +11,14 @@ class Delivery extends Model
         'lunch_assignment_id',
         'dinner_assignment_id',
         'icepacks_returned',
+        'meal_date',
         'special_note',
         'is_delivered',
         'delivery_time',
+    ];
+    protected $casts = [
+        'meal_date' => 'date',
+        'delivery_time' => 'date',
     ];
 
     public function breakfast()
@@ -27,5 +32,17 @@ class Delivery extends Model
     public function dinner()
     {
         return $this->belongsTo(CustomerMealAssignments::class, 'dinner_assignment_id');
+    }
+    public function get_customer()
+    {
+        if ($this->breakfast) {
+            return $this->breakfast->customer;
+        }
+        if ($this->lunch) {
+            return $this->lunch->customer;
+        }
+        if ($this->dinner) {
+            return $this->dinner->customer;
+        }
     }
 }

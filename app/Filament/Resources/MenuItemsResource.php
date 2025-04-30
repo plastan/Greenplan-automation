@@ -17,6 +17,8 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Tabs;
 
+use Filament\Forms\Components\Select;
+
 class MenuItemsResource extends Resource
 {
     protected static ?string $model = MenuItems::class;
@@ -37,7 +39,7 @@ class MenuItemsResource extends Resource
                             Forms\Components\DatePicker::make('meal_date')
                                 ->autofocus() // Autofocus the field.
                                 ->displayFormat($format = 'D F j, Y')
-                                ->default(Carbon::now()->next('Monday')),
+                                ->default(Carbon::now()),
 
                             Forms\Components\TextInput::make('name')
                                 ->required()
@@ -45,12 +47,16 @@ class MenuItemsResource extends Resource
                             Forms\Components\TextInput::make('description')
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('category')
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('dietary_type')
-                                ->required()
-                                ->maxLength(255),
+                            Select::make('category')
+                                ->options([
+                                    'breakfast' => 'Breakfast',
+                                    'lunch' => 'Lunch',
+                                    'dinner' => 'Dinner',
+                                ])
+                                ->required(),
+                            Select::make('dietary_type')
+                                ->options(['diabetic' => "diabetic", 'muscle gain' => 'muscle gain', 'weight loss' => 'weight loss'])
+                                ->required(),
                         ])->grow(),
 
 

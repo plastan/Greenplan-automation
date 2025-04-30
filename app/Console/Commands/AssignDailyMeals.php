@@ -50,15 +50,12 @@ class AssignDailyMeals extends Command
         }
 
 
-        $today = $date->copy()->addDay();
+        $today = $date->copy()->addDays(1);
 
         $dayOfWeek = strtolower($today->format('l'));
         $customers = Customers::query()->where('subscription_status', '=', 'active')->get();
         // $this->info("Starting daily meal assignment for {$today->format('Y-m-d')} ({$dayOfWeek})");
         $this->info(" Today => {$today->format('Y-m-d')} ({$today})");
-
-
-
 
 
         // TODO:
@@ -67,16 +64,21 @@ class AssignDailyMeals extends Command
         // GET MEAL PLAN
         // CHECK MEAL PLAN TYPE
         // CHECK Skipping
+
         foreach ($customers as $customer) {
 
             $mealPlan = $customer->mealPlan;
+
             // $isVegDay = ($mealPlan->veg_day === $dayOfWeek);
 
             $menuItems = MenuItems::query()->where('dietary_type', $mealPlan->type)
-                ->whereDate('meal_date', Carbon::today())
+                ->where('meal_date', $today)
+
+                // ->whereDate('meal_date', Carbon::today())
                 ->get();
 
             $this->info("Found {$menuItems->count()} menu items for customer ID {$customer->id}");
+
             if ($menuItems->count() === 0) {
                 // TODO: NOTIFY admin
                 $this->warn("Customer ID {$customer->id} has no menu items for the current day. Skipping.");
@@ -86,10 +88,20 @@ class AssignDailyMeals extends Command
             $breakfast = $menuItems->where('category', 'breakfast')->first();
             $lunch = $menuItems->where('category', 'lunch')->first();
             $dinner = $menuItems->where('category', 'dinner')->first();
+
             // check if exists
             $breakfast_assignment = null;
             $lunch_assignment = null;
             $dinner_assignment = null;
+
+            if ($customer->mealPlan->isSkiped) {
+                $this->info("Customer ID {$customer->id} is skipped. Skipping.");
+                $customer->mealPlan->isSkiped = false;
+                $customer->mealPlan->skips_used += 1;
+                $customer->mealPlan->save();
+                continue;
+            }
+
             try {
                 if ($customer->mealPlan->breakfast) {
                     $breakfast_assignment =  CustomerMealAssignments::updateOrCreate([
@@ -120,6 +132,7 @@ class AssignDailyMeals extends Command
                     'lunch_assignment_id' => $lunch_assignment ? $lunch_assignment->id : null,
                     'dinner_assignment_id' => $dinner_assignment ? $dinner_assignment->id : null,
                     'icepacks_returned' => True,
+                    'meal_date' => $today->format('Y-m-d'),
                     'is_delivered' => False,
                     'delivery_time' => null,
                 ]);

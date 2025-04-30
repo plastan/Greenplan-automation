@@ -27,7 +27,7 @@ class DeliveryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('meal_assignment_id')
+                Forms\Components\TextInput::make('breakfast')
                     ->required()
                     ->numeric(),
                 Forms\Components\Toggle::make('icepacks_returned')
@@ -42,9 +42,12 @@ class DeliveryResource extends Resource
     }
 
     public static function table(Table $table): Table
+    //TODO:
+    //default sort by undeliverd
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('meal_date'),
                 Tables\Columns\TextColumn::make('id')
                     ->label('Delivery ID')
                     ->sortable(),

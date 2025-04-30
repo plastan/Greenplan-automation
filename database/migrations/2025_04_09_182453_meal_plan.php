@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('current_day')->default(1);
             $table->text('restrictions_note')->nullable();
             $table->text('special_instruction')->nullable();
+            $table->boolean('is_skiped')->default(false);
+            $table->integer('skips_used')->default(0);
             $table->string('veg_day')->nullable(); // Will store day of the week
             $table->timestamps();
         });       //

@@ -10,11 +10,12 @@ class CustomerMealAssignments extends Model
 {
 
     protected $fillable = [
-        'meal_date',
         'customer_id',
         'menu_item_id',
         'delivery_status',
+        'meal_date',
     ];
+
     protected $casts = [
         'meal_date' => 'date',
     ];
@@ -30,7 +31,17 @@ class CustomerMealAssignments extends Model
         return $this->belongsTo(MenuItems::class);
     }
     public function delivery()
+
     {
-        return $this->hasOne(Delivery::class);
+
+        if ($this->customer->mealplan->breakfast) {
+            return $this->hasOne(Delivery::class, 'breakfast_assignment_id', 'id');
+        }
+        if ($this->customer->mealplan->lunch) {
+            return $this->hasOne(Delivery::class, 'lunch_assignment_id', 'id');
+        }
+        if ($this->customer->mealplan->dinner) {
+            return $this->hasOne(Delivery::class, 'dinner_assignment_id', 'id');
+        }
     }
 }

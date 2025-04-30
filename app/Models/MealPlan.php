@@ -21,12 +21,16 @@ class MealPlan extends Model
         'restrictions_note',
         'special_instruction',
         'veg_day',
+        'is_skiped',
+        'skips_used',
     ];
     protected $casts = [
         'customer_id' => 'integer',
         'breakfast' => 'boolean',
         'lunch' => 'boolean',
         'dinner' => 'boolean',
+        'is_skiped' => 'boolean',
+        'skips_used' => 'integer',
     ];
 
     public function customer()

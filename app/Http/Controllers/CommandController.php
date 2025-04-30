@@ -12,10 +12,8 @@ class CommandController extends Controller
     {
         // Example: run a custom Artisan command
         Artisan::call('app:assign-daily-meals');
-
         // You can also get the output like:
         $output = Artisan::output();
-
         return back()->with('status', 'Command executed successfully!');
     }   //
 }

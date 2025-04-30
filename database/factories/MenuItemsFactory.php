@@ -74,6 +74,9 @@ class MenuItemsFactory extends Factory
 
         // Loop through each day in the past month
         for ($date = $startDate; $date->lte($today); $date = $date->copy()->addDay()) {
+            if ($date->dayOfWeek === Carbon::SUNDAY) {
+                continue;
+            }
             // Create one menu item for each category on this date
             foreach ($categories as $category) {
                 foreach ($dietaryTypes as $dietaryType) {

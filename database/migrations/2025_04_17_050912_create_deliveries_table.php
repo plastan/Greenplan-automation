@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('breakfast_assignment_id')->nullable()->constrained('customer_meal_assignments');
             $table->foreignId('lunch_assignment_id')->nullable()->constrained('customer_meal_assignments');
             $table->foreignId('dinner_assignment_id')->nullable()->constrained('customer_meal_assignments');
-
+            $table->date('meal_date');
             $table->boolean('icepacks_returned')->default(True);
             $table->Text('special_note')->nullable();
             $table->Boolean('is_delivered')->default(False);

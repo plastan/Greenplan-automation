@@ -49,7 +49,7 @@ class CustomerMealAssignmentsResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('meal_date')->date()->sortable(),
-                Tables\Columns\TextColumn::make('customer.name')->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('customer.name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('menuItem.category'),
                 Tables\Columns\TextColumn::make('menu_item_id')
                     ->numeric()

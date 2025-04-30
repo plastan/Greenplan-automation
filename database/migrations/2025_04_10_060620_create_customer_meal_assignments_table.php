@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers');
             $table->foreignId('menu_item_id')->constrained('menu_items');
             $table->enum("delivery_status", ["delivered", "preparing", "delivering", "cancelled"]);
-            $table->timestamp('meal_date');
+            $table->date('meal_date')->nullable();
             $table->timestamps();
         });
         // constrain uniqueness of meal_date,customer_id,menu_item_id
