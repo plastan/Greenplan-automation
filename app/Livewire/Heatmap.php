@@ -55,7 +55,7 @@ class Heatmap extends Component implements HasForms
     public function create()
     {
         $this->loadHeatmapData($this->data['id']);
-        $this->dispatch('heatmapDataUpdated', data: $this->heatmapData);
+        $this->dispatch('heatmapDataUpdated', ['data' => $this->heatmapData]);
     }
 
     public function render()

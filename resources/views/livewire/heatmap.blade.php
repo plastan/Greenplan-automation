@@ -86,11 +86,7 @@ function paintCalendar(dataSource) {
         ...tooltipOptions
     });
 }
-    // Initial render
-
-    // Update calendar when event is fired
-//
-    // paintCalendar(data);
+paintCalendar(data);
    window.addEventListener('heatmapDataUpdated', function(event) {
     console.log('heatmapDataUpdated event received', event.detail);
     if (event.detail && event.detail.data) {
@@ -100,12 +96,18 @@ function paintCalendar(dataSource) {
 
         // Ensure we're executing this in the next tick of the event loop
         setTimeout(() => {
-            paintCalendar(data);
+
+        cat.fill(data)
         }, 0);
     } else {
         console.error('No data provided in the heatmapDataUpdated event');
     }
-});</script>
+});
+ function update_map(){
+        console.log("update_map");
+
+    }
+</script>
 
 @endscript
 

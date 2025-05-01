@@ -30,4 +30,41 @@ class HeatmapPage extends Page implements HasForms, HasActions
     protected static ?string $title = 'Data Visualization Heatmap';
     protected static ?int $navigationSort = 3; // Adjust as needed
     public string $search = '';
+    public array $heatmapData = [];
+
+    public $data = [
+        'id' => null,
+    ];
+
+
+    public function form(Form $form): Form
+    {
+
+        return $form
+            ->schema([
+                Select::make('id')
+                    ->label('customers')
+                    ->options(Customers::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state) {
+                        if ($state) {
+                            $this->loadHeatmapData($state);
+                            $this->emit('updateHeatmapData', $this->heatmapData);
+                        }
+                    })
+            ])
+
+            ->statePath('data');
+    }
+
+
+    public function loadHeatmapData(int $customerId)
+    {
+        if (!$customerId) {
+            $this->heatmapData = [];
+            return;
+        }
+        $this->heatmapData = app(CustomerService::class)->get_monthly_data($customerId);
+    }
 }

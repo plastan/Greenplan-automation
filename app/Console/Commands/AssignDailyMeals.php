@@ -40,8 +40,10 @@ class AssignDailyMeals extends Command
     public function handle()
     {
         // $today = Carbon::now();
+        //TODO:
+        //Remove this part for production its only for testing
         $date = CustomerMealAssignments::query('meal_date')->max('meal_date');
-
+        $this->info("date is {$date}");
         if ($date === null) {
             $date = Carbon::now();
         } else {
@@ -49,13 +51,16 @@ class AssignDailyMeals extends Command
             $date = Carbon::parse($date);
         }
 
+        if ($date->dayOfWeek === Carbon::SATURDAY) {
+            $today = $date->copy()->addDay(2);
+        } else {
+            $today = $date->copy()->addDays(1);
+        }
 
-        $today = $date->copy()->addDays(1);
 
         $dayOfWeek = strtolower($today->format('l'));
         $customers = Customers::query()->where('subscription_status', '=', 'active')->get();
         // $this->info("Starting daily meal assignment for {$today->format('Y-m-d')} ({$dayOfWeek})");
-        $this->info(" Today => {$today->format('Y-m-d')} ({$today})");
 
 
         // TODO:
@@ -70,12 +75,10 @@ class AssignDailyMeals extends Command
             $mealPlan = $customer->mealPlan;
 
             // $isVegDay = ($mealPlan->veg_day === $dayOfWeek);
+            $menuItems = MenuItems::where('dietary_type', $mealPlan->type)
+                ->whereDate('meal_date', $today)->get();
 
-            $menuItems = MenuItems::query()->where('dietary_type', $mealPlan->type)
-                ->where('meal_date', $today)
-
-                // ->whereDate('meal_date', Carbon::today())
-                ->get();
+            // ->whereDate('meal_date', Carbon::today())
 
             $this->info("Found {$menuItems->count()} menu items for customer ID {$customer->id}");
 
@@ -143,15 +146,16 @@ class AssignDailyMeals extends Command
             }
 
             DB::transaction(function () use ($customer) {
-                $cycle_day = $customer->mealPlan->current_day;
 
+                $cycle_day = $customer->mealPlan->current_day;
+                $this->info("Current day is {$cycle_day}");
                 if ($cycle_day == 23) {
                     # TODO: NOTIFY admin
                     # TODO: SEND WHATSAPP NOTIFICATION
                     $this->warn("Customer ID {$customer->id} has reached the end of the cycle. ");
                 }
 
-                if ($cycle_day < 26) {
+                if ($cycle_day < 26 && $cycle_day != 0) {
 
                     $cycle_day = $cycle_day + 1;
                 } elseif ($cycle_day === 26) {
@@ -163,6 +167,7 @@ class AssignDailyMeals extends Command
                     # TODO: NOTIFY admin
                 }
                 $customer->mealPlan->current_day = $cycle_day;
+                $customer->mealPlan->save();
             });
         }
         return Command::SUCCESS;

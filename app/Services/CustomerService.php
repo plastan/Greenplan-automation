@@ -25,4 +25,13 @@ class CustomerService
         }
         return $heatmap_data;
     }
+
+
+
+    public function get_monthly_data_all()
+    {
+        $data = [];
+
+        return $data;
+    }
 }

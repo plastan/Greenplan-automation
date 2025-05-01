@@ -18,9 +18,12 @@ class CustomersResource extends Resource
     protected static ?string $model = Customers::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static array $with = ['mealPlan'];
 
     public static function form(Form $form): Form
+
     {
+
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
@@ -42,8 +45,6 @@ class CustomersResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('height')
                     ->numeric(),
-                Forms\Components\TextInput::make('cycle')
-                    ->maxLength(255),
                 Forms\Components\DatePicker::make('cycle_start_date'),
                 Forms\Components\DatePicker::make('first_cycle_date'),
             ]);

@@ -69,8 +69,8 @@ class MenuItemsFactory extends Factory
 
         $categories = ['breakfast', 'lunch', 'dinner'];
         $dietaryTypes = ['diabetic', 'muscle gain', 'weight loss'];
-        $today = Carbon::today()->copy()->addDay(5);
-        $startDate = Carbon::today()->subMonth();
+        $today = Carbon::today()->copy()->addDay(20);
+        $startDate = Carbon::today();
 
         // Loop through each day in the past month
         for ($date = $startDate; $date->lte($today); $date = $date->copy()->addDay()) {
