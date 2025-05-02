@@ -32,16 +32,24 @@ class Heatmap extends Component implements HasForms
                     ->label('customers')
                     ->options(Customers::all()->pluck('name', 'id'))
                     ->searchable()
+                    ->live()
                     ->afterStateUpdated(function ($state) {
                         if ($state) {
+                            session()->put('selected_customer_id', $state);
                             $this->loadHeatmapData($state);
+                            $this->dispatch('refresh-page');
                         }
                     })
             ])
 
             ->statePath('data');
     }
-
+    public function mount(): void
+    {
+        $this->form->fill([
+            'id' => session('selected_customer_id'),
+        ]);
+    }
 
     public function loadHeatmapData($customerId)
     {
@@ -55,7 +63,7 @@ class Heatmap extends Component implements HasForms
     public function create()
     {
         $this->loadHeatmapData($this->data['id']);
-        $this->dispatch('heatmapDataUpdated', ['data' => $this->heatmapData]);
+        $this->dispatch('heatmapDataUpdated', data: $this->heatmapData);
     }
 
     public function render()

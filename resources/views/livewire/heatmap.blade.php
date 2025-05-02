@@ -1,26 +1,91 @@
 <div>
 
-    <form wire:submit="create">
-            {{ $this->form }}
+<head>
+<meta charset=utf-8>
+<title>2025 Activity Calendar Heatmap</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css">
+<style>
+    html {
+        width: 100%;
+        height: 100%;
+        background-color: #121212;
+        color: #f0f0f0;
+        font-family: Arial, sans-serif;
+    }
+    body {
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    h1 {
+        color: #f0f0f0;
+        margin-bottom: 20px;
+    }
+    #cal-heatmap {
+        max-width: 950px;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .legend {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 3px;
+    }
+    .tooltip {
+        position: absolute;
+        background: #2a2a2a;
+        border: 1px solid #555;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        color: white;
+    }
+</style>
+</head>
 
-            <button type="submit">
-                Submit
-            </button>
+    <form wire:submit="create">
+<x-filament::section>
+            {{ $this->form }}
+    <x-slot name="heading">
+    </x-slot>
+<x-filament::button type="submit"> Go </x-filament::button>
+
+</x-filament::section>
     </form>
+    <div class="legend"></div>
+    <div class="tooltip" id="tooltip"></div>
+
     <div id="cal-heatmap" class="bg-red"></div>
-    <pre>
-        {{ json_encode($heatmapData) }}
-    </pre>
+
+
 </div>
+
 @script
 <script>
     let data = [];
 const cal = new CalHeatmap();
-    // Create a global CalHeatmap instance
-//
-//
-//
-//
+
 
 const tooltip = document.getElementById('tooltip');
 const tooltipOptions = {
@@ -59,8 +124,8 @@ function paintCalendar(dataSource) {
         subDomain: {
             type: 'ghDay',
             radius: 2,
-            width: 11,
-            height: 11,
+            width: 20,
+            height: 20,
             gutter: 4,
             label: (timestamp, value) => value !== null ? value.toString() : ""
         },
@@ -74,7 +139,8 @@ function paintCalendar(dataSource) {
             color: {
                 scheme: 'Turbo',
                 type: 'sequential',
-                domain: [0, 20],
+                domain: [0, 3],
+    range: ['#d4e157', '#fbc02d', '#e53935','#f44336']
             },
         },
         date: {
@@ -82,13 +148,14 @@ function paintCalendar(dataSource) {
         },
         dynamicDimension: true,
         verticalOrientation: false,
-        theme: 'dark',
+        theme: 'light',
         ...tooltipOptions
     });
 }
-paintCalendar(data);
-   window.addEventListener('heatmapDataUpdated', function(event) {
+
+    window.addEventListener('heatmapDataUpdated', function (event) {
     console.log('heatmapDataUpdated event received', event.detail);
+
     if (event.detail && event.detail.data) {
         // Create a copy of the data to ensure we're working with fresh data
         const data = [...event.detail.data];
@@ -96,39 +163,18 @@ paintCalendar(data);
 
         // Ensure we're executing this in the next tick of the event loop
         setTimeout(() => {
+            paintCalendar(data);
 
-        cat.fill(data)
         }, 0);
     } else {
         console.error('No data provided in the heatmapDataUpdated event');
     }
 });
- function update_map(){
-        console.log("update_map");
-
-    }
+    window.addEventListener('refresh-page', function () {
+        window.location.reload();
+    });
 </script>
 
 @endscript
 
-@assets
-<head>
-<meta charset=utf-8>
-<title>blah</title>
-<!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
-<!-- v6 is also supported -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
 
-<script src="https://unpkg.com/cal-heatmap/dist/cal-heatmap.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/cal-heatmap/dist/cal-heatmap.css">
-
-<style>
-.cal-heatmap .ch-day {
-  fill: #e0f7fa;
-  stroke: #006064;
-}
-</style>
-
-</head>
-
-@endassets
