@@ -15,10 +15,14 @@ class Delivery extends Model
         'special_note',
         'is_delivered',
         'delivery_time',
+        'cycle_number',
+        'current_day',
     ];
     protected $casts = [
         'meal_date' => 'date',
         'delivery_time' => 'date',
+        'cycle_number' => 'integer',
+        'current_day' => 'integer',
     ];
 
     public function breakfast()

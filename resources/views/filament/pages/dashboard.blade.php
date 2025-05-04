@@ -8,6 +8,13 @@
 
 </form>
 
+<form action="{{ route('run.test_month') }}" method="POST">
+    @csrf
+<x-filament::button type="submit">
+test_service
+</x-filament::button>
+
+</form>
 @if (session('status'))
     <div class="alert alert-success">
         {{ session('status') }}

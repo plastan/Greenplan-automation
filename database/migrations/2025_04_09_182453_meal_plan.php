@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('meal_plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
-            $table->enum('type', ['muscle gain', 'weight loss', 'diabetic']);
+            $table->enum('type', ['muscle_gain', 'weight_loss', 'diabetic','veg','regular']);
             $table->boolean('breakfast')->default(true);
             $table->boolean('lunch')->default(true);
             $table->boolean('dinner')->default(true);

@@ -51,9 +51,11 @@ class EditCustomers extends EditRecord
                 ->form([
                     Forms\Components\Select::make('type')
                         ->options([
-                            'muscle gain' => 'Muscle Gain',
-                            'weight loss' => 'Weight Loss',
-                            'diabetic' => 'Diabetic',
+                            'muscle gain' => 'muscle_gain',
+                            'weight loss' => 'weight_loss',
+                            'diabetic' => 'diabetic',
+                            'veg' => 'veg',
+                            'regular' => 'regular',
                         ])
                         ->required()
                         ->label('Meal Plan Type'),

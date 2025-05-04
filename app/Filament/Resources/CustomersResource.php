@@ -103,7 +103,8 @@ class CustomersResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultPaginationPageOption(25);
     }
 
     public static function getRelations(): array

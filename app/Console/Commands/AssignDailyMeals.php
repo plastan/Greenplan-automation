@@ -74,6 +74,15 @@ class AssignDailyMeals extends Command
 
             $mealPlan = $customer->mealPlan;
 
+
+            if ($mealPlan->current_day == 0) {
+
+                $customer->subscription_status = 'inactive';
+                $customer->save();
+                $this->warn("Customer ID {$customer->id}'s subscription_status is inactive");
+                continue;
+            }
+
             // $isVegDay = ($mealPlan->veg_day === $dayOfWeek);
             $menuItems = MenuItems::where('dietary_type', $mealPlan->type)
                 ->whereDate('meal_date', $today)->get();
@@ -136,6 +145,8 @@ class AssignDailyMeals extends Command
                     'dinner_assignment_id' => $dinner_assignment ? $dinner_assignment->id : null,
                     'icepacks_returned' => True,
                     'meal_date' => $today->format('Y-m-d'),
+                    'cycle_number' => $customer->mealPlan->current_day,
+                    'current_day' => $customer->mealPlan->current_day,
                     'is_delivered' => False,
                     'delivery_time' => null,
                 ]);

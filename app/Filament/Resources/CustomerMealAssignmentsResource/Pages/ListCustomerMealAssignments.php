@@ -7,8 +7,8 @@ use App\Filament\Resources\CustomerMealAssignmentsResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
-
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class ListCustomerMealAssignments extends ListRecords
 {
@@ -20,14 +20,14 @@ class ListCustomerMealAssignments extends ListRecords
 
             Actions\Action::make('Download chart')
                 ->action(
+
                     function () {
                         $sheets = new DailyMealAssignmentExport();
-                        if ($sheets->sheets() == []) {
-                            return;
-                        } else {
-
-                            return Excel::download($sheets, 'daily_meal_assignments_' . now()->format('YmdHis') . '.xlsx');
+                        if ($sheets->sheets() == []) { return; }
+                        else {
+                            return Excel::download($sheets, 'daily_meal_assignments' . now()->format('YmdHis') . '.xlsx');
                         }
+
                     }
                 )
         ];

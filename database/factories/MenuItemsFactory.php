@@ -68,7 +68,7 @@ class MenuItemsFactory extends Factory
     {
 
         $categories = ['breakfast', 'lunch', 'dinner'];
-        $dietaryTypes = ['diabetic', 'muscle gain', 'weight loss'];
+        $dietaryTypes = ["regular","diabetic", "muscle_gain", "weight_loss",'veg'];
         $today = Carbon::today()->copy()->addDay(20);
         $startDate = Carbon::today();
 

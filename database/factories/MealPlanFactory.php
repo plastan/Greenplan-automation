@@ -21,7 +21,7 @@ class MealPlanFactory extends Factory
     {
         return [
             // 'customer_id' => Customers::factory(),
-            'type' => $this->faker->randomElement(['muscle gain', 'weight loss', 'diabetic']),
+            'type' => $this->faker->randomElement( ['muscle_gain', 'weight_loss', 'diabetic','veg','regular']),
             'breakfast' => $this->faker->boolean(),
             'lunch' => $this->faker->boolean(80), // 80% chance of being true
             'dinner' => $this->faker->boolean(80), // 80% chance of being true

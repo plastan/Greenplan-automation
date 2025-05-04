@@ -66,10 +66,10 @@
 
     <form wire:submit="create">
 <x-filament::section>
-            {{ $this->form }}
     <x-slot name="heading">
+                {{ $this->form }}
     </x-slot>
-<x-filament::button type="submit"> Go </x-filament::button>
+            <x-filament::button type="submit"> Go </x-filament::button>
 
 </x-filament::section>
     </form>
@@ -124,8 +124,8 @@ function paintCalendar(dataSource) {
         subDomain: {
             type: 'ghDay',
             radius: 2,
-            width: 20,
-            height: 20,
+            width: 12,
+            height: 12,
             gutter: 4,
             label: (timestamp, value) => value !== null ? value.toString() : ""
         },

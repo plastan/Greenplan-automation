@@ -8,7 +8,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Customers;
 use App\Models\MealPlan;
 use App\Models\Address;
+use App\Models\Delivery;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -38,7 +40,10 @@ class DatabaseSeeder extends Seeder
         MenuItems::factory()->forPastMonth();
 
 
-
+        for ($i = 0; $i < 30; $i++) {
+        Artisan::call('app:assign-daily-meals');
+        Delivery::query()->update(['is_delivered'=> true]);
+        }
 
 
         $user1 = User::create([

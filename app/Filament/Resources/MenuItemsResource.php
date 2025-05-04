@@ -12,10 +12,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Repeater;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Split;
-use Filament\Forms\Components\Tabs;
 
 use Filament\Forms\Components\Select;
 
@@ -36,6 +34,7 @@ class MenuItemsResource extends Resource
                         Section::make('Primary Details')->schema([
 
                             Forms\Components\DatePicker::make('week_start_date')->default(Carbon::now()->next('Monday'))->visible(false),
+
                             Forms\Components\DatePicker::make('meal_date')
                                 ->autofocus() // Autofocus the field.
                                 ->displayFormat($format = 'D F j, Y')
@@ -44,9 +43,11 @@ class MenuItemsResource extends Resource
                             Forms\Components\TextInput::make('name')
                                 ->required()
                                 ->maxLength(255),
+
                             Forms\Components\TextInput::make('description')
                                 ->required()
                                 ->maxLength(255),
+
                             Select::make('category')
                                 ->options([
                                     'breakfast' => 'Breakfast',
@@ -54,21 +55,27 @@ class MenuItemsResource extends Resource
                                     'dinner' => 'Dinner',
                                 ])
                                 ->required(),
+
                             Select::make('dietary_type')
-                                ->options(['diabetic' => "diabetic", 'muscle gain' => 'muscle gain', 'weight loss' => 'weight loss'])
+                                ->options(['diabetic' => "diabetic", 'muscle gain' => 'muscle_gain', 'weight loss' => 'weight_loss', 'veg' => 'veg','regular' => 'regular'])
                                 ->required(),
+
                         ])->grow(),
 
 
                         Section::make('Nutritional Information')->schema([
                             Forms\Components\TextInput::make('calories')
                                 ->numeric(),
+
                             Forms\Components\TextInput::make('fat')
                                 ->numeric(),
+
                             Forms\Components\TextInput::make('carbs')
                                 ->numeric(),
+
                             Forms\Components\TextInput::make('protein')
                                 ->numeric(),
+
                         ])->columns()
                     ])
 
@@ -95,20 +102,25 @@ class MenuItemsResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('dietary_type')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('dietary_type')->label('Meal plan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('calories')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('fat')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('carbs')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('protein')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -121,6 +133,7 @@ class MenuItemsResource extends Resource
             ])
             ->filters([
                 //
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -130,7 +143,7 @@ class MenuItemsResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->paginated(true)->defaultPaginationPageOption(16);
+            ->paginated(true)->defaultPaginationPageOption(25);
     }
 
     public static function getRelations(): array

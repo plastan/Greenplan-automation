@@ -48,6 +48,15 @@ class DeliveryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('meal_date'),
+                // Tables\Columns\Layout\Stack::make([
+                //
+                //     Tables\Columns\IconColumn::make('breakfast')
+                //         ->boolean(),
+                //     Tables\Columns\IconColumn::make('lunch')
+                //         ->boolean(),
+                //     Tables\Columns\IconColumn::make('dinner')
+                //         ->boolean(),
+                // ]),
                 Tables\Columns\TextColumn::make('id')
                     ->label('Delivery ID')
                     ->sortable(),
@@ -105,7 +114,8 @@ class DeliveryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultPaginationPageOption(25);
     }
 
     public static function getRelations(): array

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("description");
             $table->enum("category", ["breakfast", "lunch", "dinner"]);
-            $table->enum("dietary_type", ["diabetic", "muscle gain", "weight loss"]);
+            $table->enum("dietary_type", ["regular","diabetic", "muscle_gain", "weight_loss",'veg']);
             $table->float('calories')->nullable();
             $table->float('fat')->nullable();
             $table->float('carbs')->nullable();
